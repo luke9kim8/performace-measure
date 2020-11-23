@@ -8,6 +8,8 @@ services:
     ports:
       # <Port exposed> : < MySQL Port running inside container>
       - '3308:3308'
+    volumes:
+      - my-datavolume:/var/lib/mysql8
   mysql-legacy:
     image: mysql:5.7
     environment:
@@ -16,4 +18,55 @@ services:
     ports:
       # <Port exposed> : < MySQL Port running inside container>
       - '3309:3308'
-    
+  postgreSQL-new:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+    ports:
+      - '3310:3308'
+    volumes:
+      - /vagrant/perf-measure-compose:/vagrant/perf-measure-compose
+
+  postgreSQL-legacy:
+    image: postgres:9.6
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+    ports:
+      - '3311:3308'
+    volumes:
+      - /vagrant/perf-measure-compose:/vagrant/perf-measure-compose
+
+  # cockroach20:
+  #       image: cockroachdb/cockroach:v20.2.1
+  #       volumes:
+  #          - /vagrant/perf-measure-compose:/vagrant/perf-measure-compose
+  #       ports:
+  #          - "26257:26257"
+  #          - "8080:8080"
+  #       networks:
+  #           cockroachdb_net:
+  #               aliases:
+  #                  - node_1
+  #       entrypoint: tail -F /dev/null
+  # cockroach19:
+  #       image: cockroachdb/cockroach:v19.2.11
+  #       volumes:
+  #          - /vagrant/perf-measure-compose:/vagrant/perf-measure-compose
+  #       # command: version #start --insecure 
+  #       ports:
+  #          - "26258:26257"
+  #          - "8080:8080"
+  #       networks:
+  #           cockroachdb_net:
+  #               aliases:
+  #                  - node_2
+  #       entrypoint: tail -F /dev/null
+volumes:
+  my-datavolume:
+# networks:
+#     cockroachdb_net:
+#         driver: bridge
+
+  
